@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lista de Medicamentos</title>
+</head>
+<body>
+    <h1>Lista de Medicamentos</h1>
+    <a href="{% url 'crear_medicamento' %}">Añadir Medicamento</a>
+    <ul>
+        {% for medicamento in medicamentos %}
+        <li>
+            {{ medicamento.nombre }} - ${{ medicamento.precio }}
+            ({{ medicamento.existencias }} disponibles)
+            <a href="{% url 'detalle_medicamento' medicamento.id %}">Detalles</a>
+            <a href="{% url 'editar_medicamento' medicamento.id %}">Editar</a>
+            <a href="{% url 'eliminar_medicamento' medicamento.id %}">Eliminar</a>
+        </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
