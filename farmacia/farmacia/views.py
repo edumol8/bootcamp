@@ -1,7 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib import messages
 from .models import Medicamento, Venta
-from django.shortcuts import get_object_or_404, redirect
-from.forms import MedicamentoForm
+from .forms import MedicamentoForm
 
 
 def lista_medicamentos(request):
@@ -14,18 +14,19 @@ def detalle_medicamento(request, id):
     return render(request, 'farmacia/detalle_medicamento.html', {'medicamento': medicamento})
 
 
-from django.shortcuts import redirect
-from .forms import MedicamentoForm
+
 
 def crear_medicamento(request):
     if request.method == 'POST':
         form = MedicamentoForm(request.POST)
         if form.is_valid():
             form.save()
+            messages.success(request, "Medicamento guardado correctamente")
             return redirect('lista_medicamentos')
-    else:
-        form = MedicamentoForm()
-    return render(request, 'farmacia/crear_medicamento.html', {'form': form})
+        messages.error(request, "Hubo un error al guardar el medicamento")
+    else: 
+       form = MedicamentoForm()
+    return render(request, 'crear_medicamento.html', {'form': form})
 
 
 def editar_medicamento(request, id):
@@ -41,5 +42,7 @@ def editar_medicamento(request, id):
 
 def eliminar_medicamento(request, id):
     medicamento = get_object_or_404(Medicamento, id=id)
-    medicamento.delete()
-    return redirect('lista_medicamentos')
+    if request.method == 'POST':
+        medicamento.delete()
+        return redirect('lista_medicamentos')
+    return render(request, 'farmacia/eliminar_medicamento.html', {'medicamento':medicamento})

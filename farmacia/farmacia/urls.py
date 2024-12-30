@@ -4,6 +4,9 @@ from . import views
 urlpatterns = [
     path('medicamentos/', views.lista_medicamentos, name= 'lista_medicamentos'),
 
+    path('', views.lista_medicamentos, name= 'lista_medicamentos'),
+
+
     path('medicamentos/<int:id>/', views.detalle_medicamento, name='detalle_medicamento'),
 
 
